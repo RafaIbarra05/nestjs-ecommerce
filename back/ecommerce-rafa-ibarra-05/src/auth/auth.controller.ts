@@ -3,10 +3,7 @@ import { AuthService } from './auth.service';
 
 @Controller({})
 export class authController {
-  authService: AuthService;
-  constructor(authService: AuthService) {
-    this.authService = authService;
-  }
+  constructor(private authService: AuthService) {}
   @Get('/auth')
   authController() {
     return this.authService.authService();

@@ -1,14 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
 import { ProductsService } from './products.service';
+import { Product } from './product.entity';
 
 @Controller({})
 export class ProductsController {
-  productsService: ProductsService;
-  constructor(productsService: ProductsService) {
-    this.productsService = productsService;
-  }
+  constructor(private readonly productsService: ProductsService) {}
   @Get('/products')
-  getProducts() {
-    return this.productsService.productsService();
+  findAll(): Product[] {
+    return this.productsService.getAll();
   }
 }
