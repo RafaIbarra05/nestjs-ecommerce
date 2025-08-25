@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './product.entity';
 
 @Injectable()
 export class ProductsRepository {
   private products: Product[] = [
-    // datos hardcodeados
     {
       id: 1,
       name: 'Cepillo Dental Pro',
@@ -35,7 +34,32 @@ export class ProductsRepository {
     return this.products;
   }
 
-  findById(id: number): Product | undefined {
-    return this.products.find((p) => p.id === id);
+  findById(id: number): Product {
+    const found = this.products.find((p) => p.id === id);
+    if (!found) throw new NotFoundException('Product not found');
+    return found;
+  }
+
+  create(data: Omit<Product, 'id'>): number {
+    const id = this.products.length
+      ? Math.max(...this.products.map((p) => p.id)) + 1
+      : 1;
+    const newProduct: Product = { id, ...data };
+    this.products.push(newProduct);
+    return id;
+  }
+
+  update(id: number, data: Partial<Product>): number {
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) throw new NotFoundException('Product not found');
+    this.products[index] = { ...this.products[index], ...data };
+    return id;
+  }
+
+  delete(id: number): number {
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) throw new NotFoundException('Product not found');
+    this.products.splice(index, 1);
+    return id;
   }
 }
