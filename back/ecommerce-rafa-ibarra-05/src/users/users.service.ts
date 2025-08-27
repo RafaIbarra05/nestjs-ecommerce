@@ -4,8 +4,11 @@ import { User } from './user.entity';
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepo: UsersRepository) {}
-  findAll() {
-    return this.usersRepo.findAll();
+  findAll(page?: number, limit?: number) {
+    const currentPage = page && page > 0 ? page : 1;
+    const currentLimit = limit && limit > 0 ? limit : 5;
+
+    return this.usersRepo.paginate(currentPage, currentLimit);
   }
   findById(id: number) {
     return this.usersRepo.findById(id);

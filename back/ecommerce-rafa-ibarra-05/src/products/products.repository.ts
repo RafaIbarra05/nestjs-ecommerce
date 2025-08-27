@@ -34,6 +34,19 @@ export class ProductsRepository {
     return this.products;
   }
 
+  paginate(page: number, limit: number) {
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const items = this.products.slice(start, end);
+
+    return {
+      page,
+      limit,
+      total: this.products.length,
+      data: items,
+    };
+  }
+
   findById(id: number): Product {
     const found = this.products.find((p) => p.id === id);
     if (!found) throw new NotFoundException('Product not found');

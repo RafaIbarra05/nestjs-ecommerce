@@ -26,15 +26,32 @@ export class UsersRepository {
     },
   ];
 
-  findAll(): Omit<User, 'password'>[] {
-    return this.users.map(({ password, ...rest }) => rest);
+  findAll(): User[] {
+    return this.users;
+  }
+  paginate(page: number, limit: number) {
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const items = this.users.slice(start, end);
+
+    return {
+      page,
+      limit,
+      total: this.users.length,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      data: items.map(({ password, ...rest }) => rest),
+    };
   }
 
-  findById(id: number): Omit<User, 'password'> {
+  findById(id: number): User {
     const user = this.users.find((u) => u.id === id);
     if (!user) throw new NotFoundException('User not found');
-    const { password, ...rest } = user;
-    return rest;
+
+    return user;
+  }
+
+  findByEmail(email: string): User | undefined {
+    return this.users.find((u) => u.email === email);
   }
   create(data: Omit<User, 'id'>): number {
     const id = this.users.length

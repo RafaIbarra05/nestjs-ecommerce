@@ -4,8 +4,11 @@ import { Product } from './product.entity';
 @Injectable()
 export class ProductsService {
   constructor(private readonly productsRepo: ProductsRepository) {}
-  getAll(): Product[] {
-    return this.productsRepo.findAll();
+  getAll(page?: number, limit?: number) {
+    const currentPage = page && page > 0 ? page : 1;
+    const currentLimit = limit && limit > 0 ? limit : 5;
+
+    return this.productsRepo.paginate(currentPage, currentLimit);
   }
   findById(id: number) {
     return this.productsRepo.findById(id);
