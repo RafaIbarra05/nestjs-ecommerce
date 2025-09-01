@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class UsersRepository {
   private users: User[] = [
     {
-      id: 1,
+      id: uuid(),
       email: 'alice@example.com',
       name: 'Alice',
       password: '123456',
@@ -15,7 +16,7 @@ export class UsersRepository {
       city: 'Córdoba',
     },
     {
-      id: 2,
+      id: uuid(),
       email: 'bob@example.com',
       name: 'Bob',
       password: '654321',
@@ -43,32 +44,30 @@ export class UsersRepository {
     };
   }
 
-  findById(id: number): User {
+  findById(id: string): User {
     const user = this.users.find((u) => u.id === id);
     if (!user) throw new NotFoundException('User not found');
-
     return user;
   }
 
   findByEmail(email: string): User | undefined {
     return this.users.find((u) => u.email === email);
   }
-  create(data: Omit<User, 'id'>): number {
-    const id = this.users.length
-      ? Math.max(...this.users.map((u) => u.id)) + 1
-      : 1;
+
+  create(data: Omit<User, 'id'>): string {
+    const id = uuid();
     this.users.push({ id, ...data });
     return id;
   }
 
-  update(id: number, data: Partial<User>): number {
+  update(id: string, data: Partial<User>): string {
     const index = this.users.findIndex((u) => u.id === id);
     if (index === -1) throw new NotFoundException('User not found');
     this.users[index] = { ...this.users[index], ...data };
     return id;
   }
 
-  delete(id: number): number {
+  delete(id: string): string {
     const index = this.users.findIndex((u) => u.id === id);
     if (index === -1) throw new NotFoundException('User not found');
     this.users.splice(index, 1);

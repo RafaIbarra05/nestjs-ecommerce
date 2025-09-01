@@ -21,8 +21,8 @@ import { AuthGuard } from 'src/auth/auth.guard';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Get()
-  getAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+  @Get('list')
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
     return this.productsService.getAll(
       page ? parseInt(page, 10) : undefined,
       limit ? parseInt(limit, 10) : undefined,
