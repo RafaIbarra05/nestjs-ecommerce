@@ -1,78 +1,59 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Product } from './product.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from './entities/product.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProductsRepository {
-  private products: Product[] = [
-    {
-      id: 1,
-      name: 'Cepillo Dental Pro',
-      description: 'Cerdas suaves, mango ergonómico',
-      price: 5499,
-      stock: true,
-      imgUrl: 'https://picsum.photos/seed/cepillo/400/300',
-    },
-    {
-      id: 2,
-      name: 'Hilo Dental Mint',
-      description: 'Sabor menta, 50m',
-      price: 2499,
-      stock: true,
-      imgUrl: 'https://picsum.photos/seed/hilo/400/300',
-    },
-    {
-      id: 3,
-      name: 'Enjuague Bucal 250ml',
-      description: 'Antiséptico, sin alcohol',
-      price: 3899,
-      stock: false,
-      imgUrl: 'https://picsum.photos/seed/enjuague/400/300',
-    },
-  ];
+  constructor(
+    @InjectRepository(Product)
+    private readonly repo: Repository<Product>,
+  ) {}
 
-  findAll(): Product[] {
-    return this.products;
-  }
-
-  paginate(page: number, limit: number) {
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const items = this.products.slice(start, end);
+  async paginate(page: number, limit: number) {
+    const [items, total] = await this.repo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      relations: ['category'],
+    });
 
     return {
       page,
       limit,
-      total: this.products.length,
-      data: items,
+      total,
+      items,
     };
   }
 
-  findById(id: number): Product {
-    const found = this.products.find((p) => p.id === id);
-    if (!found) throw new NotFoundException('Product not found');
-    return found;
+  async findById(id: string) {
+    const product = await this.repo.findOne({
+      where: { id },
+      relations: ['category'],
+    });
+    if (!product) throw new NotFoundException('Producto no encontrado');
+    return product;
   }
 
-  create(data: Omit<Product, 'id'>): number {
-    const id = this.products.length
-      ? Math.max(...this.products.map((p) => p.id)) + 1
-      : 1;
-    const newProduct: Product = { id, ...data };
-    this.products.push(newProduct);
+  async create(data: Partial<Product>) {
+    const newProduct = this.repo.create(data);
+    const saved = await this.repo.save(newProduct);
+    return saved.id;
+  }
+
+  async update(id: string, data: Partial<Product>) {
+    await this.repo.update(id, data);
     return id;
   }
 
-  update(id: number, data: Partial<Product>): number {
-    const index = this.products.findIndex((p) => p.id === id);
-    if (index === -1) throw new NotFoundException('Product not found');
-    this.products[index] = { ...this.products[index], ...data };
+  async delete(id: string) {
+    await this.repo.delete(id);
     return id;
   }
 
-  delete(id: number): number {
-    const index = this.products.findIndex((p) => p.id === id);
-    if (index === -1) throw new NotFoundException('Product not found');
-    this.products.splice(index, 1);
-    return id;
+  // Seed para precargar productos
+  async seedProducts(products: Partial<Product>[]) {
+    const newProducts = this.repo.create(products);
+    await this.repo.save(newProducts);
+    return 'Productos agregados';
   }
 }

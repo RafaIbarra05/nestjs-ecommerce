@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
+
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepo: UsersRepository) {}
+
   findAll(page?: number, limit?: number) {
     const currentPage = page && page > 0 ? page : 1;
     const currentLimit = limit && limit > 0 ? limit : 5;
-
     return this.usersRepo.paginate(currentPage, currentLimit);
   }
-  findById(id: number) {
+
+  async findById(id: string): Promise<Omit<User, 'password'> | null> {
     return this.usersRepo.findById(id);
   }
 
@@ -18,11 +20,11 @@ export class UsersService {
     return this.usersRepo.create(data);
   }
 
-  update(id: number, data: Partial<User>) {
+  update(id: string, data: Partial<User>) {
     return this.usersRepo.update(id, data);
   }
 
-  delete(id: number) {
+  delete(id: string) {
     return this.usersRepo.delete(id);
   }
 }

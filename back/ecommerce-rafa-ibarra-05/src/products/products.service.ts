@@ -1,28 +1,57 @@
 import { Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
-import { Product } from './product.entity';
+import { CreateProductDto } from './dto/create-product.dto';
+import { Product } from './entities/product.entity';
+import { Category } from '../categories/entities/category.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 @Injectable()
 export class ProductsService {
-  constructor(private readonly productsRepo: ProductsRepository) {}
-  getAll(page?: number, limit?: number) {
-    const currentPage = page && page > 0 ? page : 1;
-    const currentLimit = limit && limit > 0 ? limit : 5;
+  constructor(
+    private readonly productsRepo: ProductsRepository,
 
-    return this.productsRepo.paginate(currentPage, currentLimit);
+    @InjectRepository(Category)
+    private readonly categoryRepo: Repository<Category>,
+  ) {}
+
+  getAll(page = 1, limit = 5) {
+    return this.productsRepo.paginate(page, limit);
   }
-  findById(id: number) {
+
+  findById(id: string) {
     return this.productsRepo.findById(id);
   }
 
-  create(data: Omit<Product, 'id'>) {
-    return this.productsRepo.create(data);
+  async create(data: CreateProductDto) {
+    const category = await this.categoryRepo.findOneBy({ id: data.categoryId });
+
+    if (!category) {
+      throw new Error('Categoría no encontrada');
+    }
+
+    const productData: Partial<Product> = {
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      stock: data.stock,
+      imgUrl: data.imgUrl,
+      category,
+    };
+
+    return this.productsRepo.create(productData);
   }
 
-  update(id: number, data: Partial<Product>) {
+  update(id: string, data: Partial<Product>) {
     return this.productsRepo.update(id, data);
   }
 
-  delete(id: number) {
+  delete(id: string) {
     return this.productsRepo.delete(id);
+  }
+
+  // Seed desde archivo externo
+  async seed(products: Partial<Product>[]) {
+    return this.productsRepo.seedProducts(products);
   }
 }

@@ -6,16 +6,16 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { Product } from './product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Product } from './entities/product.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -30,26 +30,35 @@ export class ProductsController {
   }
 
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id: number) {
+  getOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.findById(id);
   }
+
   @UseGuards(AuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() data: CreateProductDto) {
-    return { id: this.productsService.create(data) };
+    return this.productsService.create(data);
   }
+
   @UseGuards(AuthGuard)
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() data: Partial<Product>,
   ) {
-    return { id: this.productsService.update(id, data) };
+    return this.productsService.update(id, data);
   }
+
   @UseGuards(AuthGuard)
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return { id: this.productsService.delete(id) };
+  delete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.productsService.delete(id);
+  }
+
+  // BONUS: Endpoint para seed de productos
+  @Post('seeder')
+  seed(@Body() products: Partial<Product>[]) {
+    return this.productsService.seed(products);
   }
 }

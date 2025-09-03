@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
-  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsPositive,
   IsString,
+  IsOptional,
+  IsUUID,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -13,15 +13,22 @@ export class CreateProductDto {
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   description: string;
 
   @IsNumber()
   @IsPositive()
   price: number;
 
-  @IsBoolean()
-  stock: boolean;
+  @IsNumber()
+  @IsPositive()
+  stock: number;
 
+  @IsOptional()
   @IsString()
-  imgUrl: string;
+  imgUrl?: string;
+
+  @IsUUID()
+  @IsNotEmpty()
+  categoryId: string;
 }

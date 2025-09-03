@@ -1,76 +1,99 @@
+// src/users/users.repository.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class UsersRepository {
-  private users: User[] = [
-    {
-      id: uuid(),
-      email: 'alice@example.com',
-      name: 'Alice',
-      password: '123456',
-      address: 'Av. Siempre Viva 742',
-      phone: '+54 9 351 555-0001',
-      country: 'Argentina',
-      city: 'Córdoba',
-    },
-    {
-      id: uuid(),
-      email: 'bob@example.com',
-      name: 'Bob',
-      password: '654321',
-      address: 'Calle Falsa 123',
-      phone: '+54 9 11 555-0002',
-      country: 'Argentina',
-      city: 'Buenos Aires',
-    },
-  ];
+  constructor(
+    @InjectRepository(User)
+    private readonly repo: Repository<User>,
+  ) {}
 
-  findAll(): User[] {
-    return this.users;
+  async findById(id: string): Promise<Omit<User, 'password'> | null> {
+    const user = await this.repo.findOne({
+      where: { id },
+      relations: ['orders'],
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        address: true,
+        phone: true,
+        country: true,
+        city: true,
+        isAdmi: true,
+        orders: {
+          id: true,
+          date: true,
+        },
+      },
+    });
+
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
   }
-  paginate(page: number, limit: number) {
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const items = this.users.slice(start, end);
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.repo.findOne({ where: { email } });
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
+  }
+
+  async create(data: Omit<User, 'id'>): Promise<string> {
+    const newUser = this.repo.create(data);
+    const saved = await this.repo.save(newUser);
+    return saved.id;
+  }
+
+  async update(id: string, data: Partial<User>): Promise<string> {
+    await this.repo.update(id, data);
+    return id;
+  }
+
+  async delete(id: string): Promise<string> {
+    await this.repo.delete(id);
+    return id;
+  }
+
+  async paginate(page: number, limit: number) {
+    const [items, total] = await this.repo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        address: true,
+        phone: true,
+        country: true,
+        city: true,
+        isAdmi: true,
+      },
+    });
 
     return {
       page,
       limit,
-      total: this.users.length,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      data: items.map(({ password, ...rest }) => rest),
+      total,
+      data: items,
     };
   }
 
-  findById(id: string): User {
-    const user = this.users.find((u) => u.id === id);
-    if (!user) throw new NotFoundException('User not found');
-    return user;
-  }
-
-  findByEmail(email: string): User | undefined {
-    return this.users.find((u) => u.email === email);
-  }
-
-  create(data: Omit<User, 'id'>): string {
-    const id = uuid();
-    this.users.push({ id, ...data });
-    return id;
-  }
-
-  update(id: string, data: Partial<User>): string {
-    const index = this.users.findIndex((u) => u.id === id);
-    if (index === -1) throw new NotFoundException('User not found');
-    this.users[index] = { ...this.users[index], ...data };
-    return id;
-  }
-
-  delete(id: string): string {
-    const index = this.users.findIndex((u) => u.id === id);
-    if (index === -1) throw new NotFoundException('User not found');
-    this.users.splice(index, 1);
-    return id;
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.repo.find({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        address: true,
+        phone: true,
+        country: true,
+        city: true,
+        isAdmi: true,
+      },
+    });
+    return users;
   }
 }

@@ -13,9 +13,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
