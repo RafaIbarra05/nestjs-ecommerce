@@ -5,8 +5,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Category } from 'src/categories/entities/category.entity';
-import { OrderDetail } from 'src/orders/order-detail.entity';
+import { Category } from '../../categories/entities/category.entity';
+import { OrderDetail } from '../../orders/order-detail.entity';
 
 @Entity('products')
 export class Product {
@@ -28,6 +28,7 @@ export class Product {
     default: 'https://cdn-icons-png.flaticon.com/512/1375/1375106.png',
   })
   imgUrl: string;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 

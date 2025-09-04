@@ -7,8 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './order.entity';
 import { OrderDetail } from './order-detail.entity';
 import { Repository, MoreThan } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Product } from 'src/products/entities/product.entity';
+import { User } from '../users/entities/user.entity';
+import { Product } from '../products/entities/product.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { In } from 'typeorm';
 
