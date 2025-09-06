@@ -1,8 +1,8 @@
-// src/users/users.repository.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -23,7 +23,7 @@ export class UsersRepository {
         phone: true,
         country: true,
         city: true,
-        isAdmi: true,
+        isAdmin: true,
         orders: {
           id: true,
           date: true,
@@ -40,21 +40,34 @@ export class UsersRepository {
     if (!user) throw new NotFoundException('Usuario no encontrado');
     return user;
   }
+  async addUser(
+    data: CreateUserDto,
+  ): Promise<{ id: string; name: string; email: string }> {
+    const newUser = this.repo.create({
+      ...data,
+      isAdmin: false,
+    });
 
-  async create(data: Omit<User, 'id'>): Promise<string> {
-    const newUser = this.repo.create(data);
-    const saved = await this.repo.save(newUser);
-    return saved.id;
+    const savedUser = await this.repo.save(newUser);
+
+    return {
+      id: savedUser.id,
+      name: savedUser.name,
+      email: savedUser.email,
+    };
   }
 
-  async update(id: string, data: Partial<User>): Promise<string> {
-    await this.repo.update(id, data);
-    return id;
+  async update(id: string, data: Partial<User>): Promise<User> {
+    const user = await this.repo.preload({ id, ...data });
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return this.repo.save(user);
   }
 
-  async delete(id: string): Promise<string> {
-    await this.repo.delete(id);
-    return id;
+  async delete(id: string): Promise<void> {
+    const result = await this.repo.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
   }
 
   async paginate(page: number, limit: number) {
@@ -69,7 +82,7 @@ export class UsersRepository {
         phone: true,
         country: true,
         city: true,
-        isAdmi: true,
+        isAdmin: true,
       },
     });
 
@@ -82,7 +95,7 @@ export class UsersRepository {
   }
 
   async findAll(): Promise<Omit<User, 'password'>[]> {
-    const users = await this.repo.find({
+    return this.repo.find({
       select: {
         id: true,
         name: true,
@@ -91,9 +104,8 @@ export class UsersRepository {
         phone: true,
         country: true,
         city: true,
-        isAdmi: true,
+        isAdmin: true,
       },
     });
-    return users;
   }
 }

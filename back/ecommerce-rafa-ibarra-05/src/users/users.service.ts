@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -15,16 +16,18 @@ export class UsersService {
   async findById(id: string): Promise<Omit<User, 'password'> | null> {
     return this.usersRepo.findById(id);
   }
-
-  create(data: Omit<User, 'id'>) {
-    return this.usersRepo.create(data);
+  async create(data: CreateUserDto) {
+    return this.usersRepo.addUser(data);
   }
 
-  update(id: string, data: Partial<User>) {
+  async update(id: string, data: Partial<CreateUserDto>) {
+    const user = await this.usersRepo.findById(id);
+    if (!user)
+      throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     return this.usersRepo.update(id, data);
   }
-
-  delete(id: string) {
-    return this.usersRepo.delete(id);
+  async delete(id: string) {
+    await this.usersRepo.delete(id);
+    return { message: 'Usuario eliminado correctamente' };
   }
 }

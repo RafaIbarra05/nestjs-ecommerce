@@ -8,12 +8,12 @@ import { UsersRepository } from '../users/users.repository';
 export class AuthService {
   constructor(private readonly usersRepo: UsersRepository) {}
 
-  signin(email: string, password: string) {
+  async signin(email: string, password: string) {
     if (!email || !password) {
       throw new BadRequestException('Email y password son requeridos');
     }
 
-    const user = this.usersRepo.findByEmail(email);
+    const user = await this.usersRepo.findByEmail(email);
 
     if (!user || user.password !== password) {
       throw new UnauthorizedException('Email o password incorrectos');

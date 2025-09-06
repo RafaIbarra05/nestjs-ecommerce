@@ -15,8 +15,8 @@ export class User {
   @Column({ type: 'varchar', length: 20, nullable: false })
   password: string;
 
-  @Column({ type: 'int', nullable: true })
-  phone: number;
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  phone: string;
 
   @Column({ length: 50, nullable: true })
   country: string;
@@ -30,7 +30,7 @@ export class User {
     type: 'boolean',
     default: false,
   })
-  isAdmi: boolean;
+  isAdmin: boolean;
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
 }

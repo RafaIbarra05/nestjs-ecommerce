@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import typeorm from './config/typeorm';
 import { DatabaseModule } from './database/database.module';
 import { CategoriesModule } from './categories/categories.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -16,8 +17,10 @@ import { CategoriesModule } from './categories/categories.module';
     DatabaseModule,
     UsersModule,
     AuthModule,
+    OrdersModule,
     ProductsModule,
     CategoriesModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],

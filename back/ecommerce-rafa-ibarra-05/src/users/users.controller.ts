@@ -30,7 +30,7 @@ export class UsersController {
   }
   @UseGuards(AuthGuard)
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id: number) {
+  getOne(@Param('id', ParseIntPipe) id: string) {
     return this.service.findById(id);
   }
 
@@ -41,12 +41,12 @@ export class UsersController {
   }
   @UseGuards(AuthGuard)
   @Put(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() data: Partial<User>) {
+  update(@Param('id') id: string, @Body() data: Partial<User>) {
     return { id: this.service.update(id, data) };
   }
   @UseGuards(AuthGuard)
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id') id: string) {
     return { id: this.service.delete(id) };
   }
 }
