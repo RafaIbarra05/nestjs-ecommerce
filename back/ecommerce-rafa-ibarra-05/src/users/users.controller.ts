@@ -20,7 +20,7 @@ import { User } from './entities/user.entity';
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
-  @UseGuards(AuthGuard)
+  /* @UseGuards(AuthGuard) */
   @Get()
   getAll(@Query('page') page?: string, @Query('limit') limit?: string) {
     return this.service.findAll(
@@ -36,9 +36,11 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() data: CreateUserDto) {
-    return { id: this.service.create(data) };
+  async create(@Body() data: CreateUserDto) {
+    const user = await this.service.create(data);
+    return { id: user.id };
   }
+
   @UseGuards(AuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() data: Partial<User>) {

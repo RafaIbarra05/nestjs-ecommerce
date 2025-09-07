@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
+  repo: any;
   constructor(private readonly usersRepo: UsersRepository) {}
 
   findAll(page?: number, limit?: number) {
@@ -16,8 +17,10 @@ export class UsersService {
   async findById(id: string): Promise<Omit<User, 'password'> | null> {
     return this.usersRepo.findById(id);
   }
-  async create(data: CreateUserDto) {
-    return this.usersRepo.addUser(data);
+  async create(
+    userDto: CreateUserDto,
+  ): Promise<{ id: string; name: string; email: string }> {
+    return this.usersRepo.addUser(userDto);
   }
 
   async update(id: string, data: Partial<CreateUserDto>) {

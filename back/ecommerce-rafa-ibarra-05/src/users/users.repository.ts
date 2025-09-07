@@ -40,6 +40,7 @@ export class UsersRepository {
     if (!user) throw new NotFoundException('Usuario no encontrado');
     return user;
   }
+
   async addUser(
     data: CreateUserDto,
   ): Promise<{ id: string; name: string; email: string }> {
@@ -47,9 +48,8 @@ export class UsersRepository {
       ...data,
       isAdmin: false,
     });
-
     const savedUser = await this.repo.save(newUser);
-
+    console.log('🧪 savedUser:', savedUser);
     return {
       id: savedUser.id,
       name: savedUser.name,
