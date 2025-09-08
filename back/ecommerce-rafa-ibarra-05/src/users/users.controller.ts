@@ -6,7 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -15,12 +15,13 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '.././auth/auth.guard';
-import { User } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
-  /* @UseGuards(AuthGuard) */
+
+  @UseGuards(AuthGuard)
   @Get()
   getAll(@Query('page') page?: string, @Query('limit') limit?: string) {
     return this.service.findAll(
@@ -30,7 +31,7 @@ export class UsersController {
   }
   @UseGuards(AuthGuard)
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id: string) {
+  getOne(@Param('id') id: string) {
     return this.service.findById(id);
   }
 
@@ -43,9 +44,17 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Partial<User>) {
-    return { id: this.service.update(id, data) };
+  async update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: UpdateUserDto,
+  ) {
+    const updatedUser = await this.service.update(id, data);
+    return {
+      message: 'Usuario actualizado correctamente',
+      data: updatedUser,
+    };
   }
+
   @UseGuards(AuthGuard)
   @Delete(':id')
   delete(@Param('id') id: string) {

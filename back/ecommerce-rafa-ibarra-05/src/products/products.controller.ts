@@ -56,7 +56,6 @@ export class ProductsController {
     return this.productsService.delete(id);
   }
 
-  // BONUS: Endpoint para seed de productos
   @Post('seeder')
   seed(@Body() products: Partial<Product>[]) {
     return this.productsService.seed(products);

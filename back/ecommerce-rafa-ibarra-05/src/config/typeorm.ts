@@ -3,6 +3,7 @@ dotenvConfig({ path: '.env' });
 import { registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 console.log('🔑 DB_PASSWORD from env:', process.env.DB_PASSWORD);
+console.log(`🧪 Conectando a DB: ${process.env.DB_NAME}`);
 
 console.log(
   '✅ DB_PASSWORD:',
