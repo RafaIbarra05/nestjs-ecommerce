@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
@@ -27,7 +27,7 @@ export class ProductsService {
     const category = await this.categoryRepo.findOneBy({ id: data.categoryId });
 
     if (!category) {
-      throw new Error('Categoría no encontrada');
+      throw new NotFoundException('Categoría no encontrada');
     }
 
     const productData: Partial<Product> = {

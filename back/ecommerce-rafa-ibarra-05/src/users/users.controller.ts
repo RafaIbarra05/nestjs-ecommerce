@@ -31,7 +31,7 @@ export class UsersController {
   }
   @UseGuards(AuthGuard)
   @Get(':id')
-  getOne(@Param('id') id: string) {
+  getOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.service.findById(id);
   }
 
@@ -57,7 +57,7 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  delete(@Param('id', new ParseUUIDPipe()) id: string) {
     return { id: this.service.delete(id) };
   }
 }

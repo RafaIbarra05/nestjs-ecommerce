@@ -16,6 +16,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { Product } from './entities/product.entity';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -45,7 +46,7 @@ export class ProductsController {
   @Put(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() data: Partial<Product>,
+    @Body() data: UpdateProductDto,
   ) {
     return this.productsService.update(id, data);
   }

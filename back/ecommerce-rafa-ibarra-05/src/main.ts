@@ -2,18 +2,27 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { LoggerGlobal } from './middlewares/logger.middleware';
 import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(LoggerGlobal);
-  await app.listen(process.env.PORT ?? 3000);
 
+  // 🧾 Logger personalizado
+  app.use(LoggerGlobal);
+
+  // ✅ Pipe global de validación
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // elimina propiedades que no están en el DTO
-      forbidNonWhitelisted: true, // lanza error si se envían campos extra
-      transform: true, // convierte tipos automáticamente (ej: string -> number)
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true, // recomendado para query params
+      },
     }),
   );
+  app.useGlobalFilters(new AllExceptionsFilter());
+  // 🚀 Iniciar servidor
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

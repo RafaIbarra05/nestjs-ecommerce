@@ -1,4 +1,4 @@
-import { IsUUID, ValidateNested, IsArray } from 'class-validator';
+import { IsUUID, ValidateNested, IsArray, ArrayMinSize } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class ProductDto {
@@ -11,6 +11,9 @@ export class CreateOrderDto {
   userId: string;
 
   @IsArray()
+  @ArrayMinSize(1, {
+    message: 'Debes incluir al menos un producto en la orden.',
+  })
   @ValidateNested({ each: true })
   @Type(() => ProductDto)
   products: ProductDto[];
