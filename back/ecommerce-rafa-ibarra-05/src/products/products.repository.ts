@@ -49,11 +49,16 @@ export class ProductsRepository {
     await this.repo.delete(id);
     return id;
   }
-
-  // Seed para precargar productos
   async seedProducts(products: Partial<Product>[]) {
-    const newProducts = this.repo.create(products);
-    await this.repo.save(newProducts);
+    for (const element of products) {
+      const exists = await this.repo.findOne({
+        where: { name: element.name },
+      });
+      if (!exists) {
+        const newProduct = this.repo.create(element);
+        await this.repo.save(newProduct);
+      }
+    }
     return 'Productos agregados';
   }
 }
