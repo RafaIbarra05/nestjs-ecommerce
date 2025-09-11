@@ -29,11 +29,11 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @Length(3, 80)
-  address: string;
+  address?: string;
 
   @IsNotEmpty()
   @IsNumberString({}, { message: 'El teléfono debe contener solo números.' })
-  phone: string;
+  phone?: string;
 
   @IsOptional()
   @IsString()

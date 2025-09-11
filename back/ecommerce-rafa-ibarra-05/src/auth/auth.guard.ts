@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,26 +17,26 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Authorization header is required');
     }
 
-    // Debe comenzar con "Basic "
-    if (!authHeader.startsWith('Basic ')) {
+    // Debe comenzar con "Bearer "
+    if (!authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException(
-        'Authorization header must start with Basic',
+        'Authorization header must start with Bearer',
       );
     }
 
-    // Sacamos la parte después de "Basic "
-    const credentials = authHeader.slice(6).trim();
+    // Extraer token
+    const token = authHeader.split(' ')[1];
 
-    // Debe contener un email y un password separados por ":"
-    const [email, password] = credentials.split(':');
+    try {
+      // Verificar token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!);
 
-    if (!email || !password) {
-      throw new UnauthorizedException(
-        'Authorization header must include email and password',
-      );
+      // Adjuntar el payload del token al request
+      request.user = decoded;
+
+      return true;
+    } catch (err) {
+      throw new UnauthorizedException('Invalid or expired token');
     }
-
-    // Por ahora no validamos si son correctos
-    return true;
   }
 }
