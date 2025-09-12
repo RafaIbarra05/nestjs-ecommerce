@@ -42,7 +42,7 @@ export class ProductsController {
     return this.productsService.create(data);
   }
 
-  /* @UseGuards(AuthGuard) */
+  @UseGuards(AuthGuard)
   @Put(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,

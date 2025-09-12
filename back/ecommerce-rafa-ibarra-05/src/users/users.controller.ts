@@ -1,22 +1,22 @@
 import {
   Body,
   Controller,
-  /*   Delete,*/
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
-  /* Put */
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '.././auth/auth.guard';
-/* import { UpdateUserDto } from './dto/update-user.dto';
- */
+import { UpdateUserDto } from './dto/update-user.dto';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
@@ -42,7 +42,7 @@ export class UsersController {
     const user = await this.service.create(data);
     return { id: user.id };
   }
-  /* 
+
   @UseGuards(AuthGuard)
   @Put(':id')
   async update(
@@ -54,13 +54,11 @@ export class UsersController {
       message: 'Usuario actualizado correctamente',
       data: updatedUser,
     };
-  } */
+  }
 
-  /*   @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   delete(@Param('id', new ParseUUIDPipe()) id: string) {
     return { id: this.service.delete(id) };
   }
-
- */
 }

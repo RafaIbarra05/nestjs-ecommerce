@@ -6,7 +6,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { UsersRepository } from '../users/users.repository';
-import { SignupDto } from './dto/signup.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,9 @@ export class AuthService {
       throw new BadRequestException('Email y password son requeridos');
     }
 
-    const user = await this.usersRepo.findByEmail(email.toLocaleLowerCase());
+    const user = await this.usersRepo.findByEmailWithPassword(
+      email.toLocaleLowerCase(),
+    );
 
     const isMatch = user && (await bcrypt.compare(password, user.password));
 
@@ -39,11 +41,11 @@ export class AuthService {
     };
   }
 
-  async signup(data: SignupDto) {
-    const { name, email, password, confirmPassword } = data;
-
-    if (password !== confirmPassword) {
-      throw new BadRequestException('Las contraseñas no coinciden');
+  async signup(data: CreateUserDto) {
+    const { name, email, password, ...rest } = data;
+    const userExists = await this.usersRepo.findByEmail(email);
+    if (userExists) {
+      throw new BadRequestException('El email ya está registrado');
     }
 
     const emailNormalized = email.toLowerCase();
@@ -53,6 +55,7 @@ export class AuthService {
       name,
       email: emailNormalized,
       password: hashedPassword,
+      ...rest,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

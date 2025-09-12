@@ -7,6 +7,7 @@ import {
   Length,
   Matches,
 } from 'class-validator';
+import { Match } from 'src/common/decorators/match.decorator';
 
 export class CreateUserDto {
   @IsEmail()
@@ -25,6 +26,12 @@ export class CreateUserDto {
       'La contraseña debe tener al menos una minúscula, una mayúscula, un número y un carácter especial (!@#$%^&*).',
   })
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(8, 15)
+  @Match('password', { message: 'Las contraseñas no coinciden' })
+  confirmPassword: string;
 
   @IsString()
   @IsNotEmpty()
