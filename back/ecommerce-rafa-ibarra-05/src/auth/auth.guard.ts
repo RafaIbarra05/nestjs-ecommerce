@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -29,8 +30,10 @@ export class AuthGuard implements CanActivate {
 
     try {
       // Verificar token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET as string,
+      ) as JwtPayload;
       // Adjuntar el payload del token al request
       request.user = decoded;
 

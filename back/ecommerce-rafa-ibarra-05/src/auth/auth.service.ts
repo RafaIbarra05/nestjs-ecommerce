@@ -7,6 +7,8 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { UsersRepository } from '../users/users.repository';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { Role } from './roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +29,11 @@ export class AuthService {
       throw new UnauthorizedException('Email o password incorrectos');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.isAdmin ? Role.Admin : Role.User,
+    };
     const token = jwt.sign(payload, process.env.JWT_SECRET!, {
       expiresIn: '1h',
     });

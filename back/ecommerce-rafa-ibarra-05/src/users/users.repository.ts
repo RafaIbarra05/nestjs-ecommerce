@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationResult } from 'src/common/types/pagination-result';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersRepository {
@@ -25,7 +26,6 @@ export class UsersRepository {
         phone: true,
         country: true,
         city: true,
-        isAdmin: true,
         orders: {
           id: true,
           date: true,
@@ -49,9 +49,11 @@ export class UsersRepository {
 
   async addUser(data: CreateUserDto): Promise<User> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirmPassword: _, ...userData } = data;
+    const { confirmPassword: _, password, ...userData } = data;
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = this.repo.create({
       ...userData,
+      password: hashedPassword,
       isAdmin: false,
     });
 

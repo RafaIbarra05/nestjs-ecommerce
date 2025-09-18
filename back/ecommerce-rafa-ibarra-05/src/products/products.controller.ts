@@ -17,8 +17,12 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { Product } from './entities/product.entity';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @Controller('products')
+@UseGuards(AuthGuard, RolesGuard)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -44,6 +48,7 @@ export class ProductsController {
 
   @UseGuards(AuthGuard)
   @Put(':id')
+  @Roles(Role.Admin)
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() data: UpdateProductDto,

@@ -16,13 +16,17 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '.././auth/auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get()
+  @Roles(Role.Admin)
   getAll(@Query('page') page?: string, @Query('limit') limit?: string) {
     return this.service.findAll(
       page ? parseInt(page, 10) : undefined,
