@@ -53,11 +53,12 @@ export class UsersRepository {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = this.repo.create({
       ...userData,
+      email: userData.email.toLowerCase(),
       password: hashedPassword,
       isAdmin: false,
     });
 
-    return await this.repo.save(newUser); // Devuelve el usuario completo, incl. password
+    return await this.repo.save(newUser);
   }
 
   async update(id: string, data: UpdateUserDto): Promise<User> {
