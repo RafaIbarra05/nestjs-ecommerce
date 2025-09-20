@@ -63,6 +63,10 @@ export class AuthService {
       password: hashedPassword,
       ...rest,
     });
+    console.log('SIGNUP DEBUG:', {
+      plain: password,
+      hashed: hashedPassword,
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...safeUser } = createdUser;

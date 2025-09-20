@@ -3,17 +3,13 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   ParseUUIDPipe,
-  Post,
   Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '.././auth/auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -92,19 +88,6 @@ export class UsersController {
   @Get(':id')
   getOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.service.findById(id);
-  }
-
-  @Post()
-  @ApiResponse({
-    status: 201,
-    description: 'Usuario creado correctamente',
-    schema: { example: { id: 'uuid-nuevo' } },
-  })
-  @ApiResponse({ status: 400, description: 'Datos inválidos' })
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() data: CreateUserDto) {
-    const user = await this.service.create(data);
-    return { id: user.id };
   }
 
   @UseGuards(AuthGuard)

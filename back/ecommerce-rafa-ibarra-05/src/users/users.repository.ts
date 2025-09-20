@@ -2,10 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationResult } from 'src/common/types/pagination-result';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersRepository {
@@ -47,15 +45,16 @@ export class UsersRepository {
     });
   }
 
-  async addUser(data: CreateUserDto): Promise<User> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirmPassword: _, password, ...userData } = data;
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async addUser(data: {
+    email: string;
+    password: string;
+    name: string;
+    isAdmin?: boolean;
+  }): Promise<User> {
     const newUser = this.repo.create({
-      ...userData,
-      email: userData.email.toLowerCase(),
-      password: hashedPassword,
-      isAdmin: false,
+      ...data,
+      email: data.email.toLowerCase(),
+      isAdmin: data.isAdmin ?? false,
     });
 
     return await this.repo.save(newUser);
