@@ -48,20 +48,36 @@ export class AuthService {
   }
 
   async signup(data: CreateUserDto) {
-    const { name, email, password, ...rest } = data;
+    const {
+      name,
+      email,
+      password,
+      confirmPassword,
+      address,
+      phone,
+      country,
+      city,
+    } = data;
+
+    if (password !== confirmPassword) {
+      throw new BadRequestException('Las contraseñas no coinciden');
+    }
+
     const userExists = await this.usersRepo.findByEmail(email);
     if (userExists) {
       throw new BadRequestException('El email ya está registrado');
     }
 
-    const emailNormalized = email.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const createdUser = await this.usersRepo.addUser({
       name,
-      email: emailNormalized,
+      email: email.toLocaleLowerCase(),
       password: hashedPassword,
-      ...rest,
+      address,
+      phone,
+      country,
+      city,
     });
     console.log('SIGNUP DEBUG:', {
       plain: password,

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationResult } from 'src/common/types/pagination-result';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -45,12 +46,14 @@ export class UsersRepository {
     });
   }
 
-  async addUser(data: {
-    email: string;
-    password: string;
-    name: string;
-    isAdmin?: boolean;
-  }): Promise<User> {
+  async addUser(
+    data: Omit<CreateUserDto, 'confirmPassword'> & {
+      email: string;
+      password: string;
+      name: string;
+      isAdmin?: boolean;
+    },
+  ): Promise<User> {
     const newUser = this.repo.create({
       ...data,
       email: data.email.toLowerCase(),
