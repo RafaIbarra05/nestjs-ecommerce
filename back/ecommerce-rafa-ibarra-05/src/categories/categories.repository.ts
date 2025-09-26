@@ -15,17 +15,27 @@ export class CategoriesRepository {
     return this.categoriesReposiroty.find();
   }
   async addCategories() {
+    const results = { insert: 0, skipped: 0, total: 0 };
+
     for (const element of Data) {
+      const categoryElement = element.category;
+
       const exists = await this.categoriesReposiroty.findOne({
-        where: { name: element.category },
+        where: { name: categoryElement },
       });
-      if (!exists) {
+
+      if (exists) {
+        results.skipped++;
+      } else {
         const newCategory = this.categoriesReposiroty.create({
-          name: element.category,
+          name: categoryElement,
         });
         await this.categoriesReposiroty.save(newCategory);
+        results.insert++;
       }
     }
-    return 'Categorias agregadas';
+
+    results.total = results.insert + results.skipped;
+    return results;
   }
 }

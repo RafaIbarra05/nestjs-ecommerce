@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -7,7 +7,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Get('seeder')
+  @Post('seeder')
   @ApiResponse({
     status: 201,
     description: 'Categorías precargadas correctamente',
