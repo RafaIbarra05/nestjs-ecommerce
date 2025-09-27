@@ -1,87 +1,98 @@
 [
-    {
-      "name": "Iphone 15",
-      "description": "The best smartphone in the world",
-      "price": 199.99,
-      "stock": 12,
-      "category": "smartphone"
-    },
-    {
-      "name": "Samsung Galaxy S23",
-      "description": "The best smartphone in the world",
-      "price": 150.0,
-      "stock": 12,
-      "category": "smartphone"
-    },
-    {
-      "name": "Motorola Edge 40",
-      "description": "The best smartphone in the world",
-      "price": 179.89,
-      "stock": 12,
-      "category": "smartphone"
-    },
-    {
-      "name": "Samsung Odyssey G9",
-      "description": "The best monitor in the world",
-      "price": 299.99,
-      "stock": 12,
-      "category": "monitor"
-    },
-    {
-      "name": "LG UltraGear",
-      "description": "The best monitor in the world",
-      "price": 199.99,
-      "stock": 12,
-      "category": "monitor"
-    },
-    {
-      "name": "Acer Predator",
-      "description": "The best monitor in the world",
-      "price": 150.0,
-      "stock": 12,
-      "category": "monitor"
-    },
-    {
-      "name": "Razer BlackWidow V3",
-      "description": "The best keyboard in the world",
-      "price": 99.99,
-      "stock": 12,
-      "category": "keyboard"
-    },
-    {
-      "name": "Corsair K70",
-      "description": "The best keyboard in the world",
-      "price": 79.99,
-      "stock": 12,
-      "category": "keyboard"
-    },
-    {
-      "name": "Logitech G Pro",
-      "description": "The best keyboard in the world",
-      "price": 59.99,
-      "stock": 12,
-      "category": "keyboard"
-    },
-    {
-      "name": "Razer Viper",
-      "description": "The best mouse in the world",
-      "price": 49.99,
-      "stock": 12,
-      "category": "mouse"
-    },
-    {
-      "name": "Logitech G502 Pro",
-      "description": "The best mouse in the world",
-      "price": 39.99,
-      "stock": 12,
-      "category": "mouse"
-    },
-    {
-      "name": "SteelSeries Rival 3",
-      "description": "The best mouse in the world",
-      "price": 29.99,
-      "stock": 12,
-      "category": "mouse"
-    }
-  ]
-  
+  {
+    "name": "Iphone 15",
+    "description": "The best smartphone in the world",
+    "price": 199.99,
+    "stock": 12,
+    "category": "smartphone",
+    "imgUrl": "https://cdn.com/iphone15.png"
+  },
+  {
+    "name": "Samsung Galaxy S23",
+    "description": "The best smartphone in the world",
+    "price": 150.0,
+    "stock": 12,
+    "category": "smartphone",
+    "imgUrl": "https://cdn.com/samsung-s23.png"
+  },
+  {
+    "name": "Motorola Edge 40",
+    "description": "The best smartphone in the world",
+    "price": 179.89,
+    "stock": 12,
+    "category": "smartphone",
+    "imgUrl": "https://cdn.com/motorola-edge40.png"
+  },
+  {
+    "name": "Samsung Odyssey G9",
+    "description": "The best monitor in the world",
+    "price": 299.99,
+    "stock": 12,
+    "category": "monitor",
+    "imgUrl": "https://cdn.com/odyssey-g9.png"
+  },
+  {
+    "name": "LG UltraGear",
+    "description": "The best monitor in the world",
+    "price": 199.99,
+    "stock": 12,
+    "category": "monitor",
+    "imgUrl": "https://cdn.com/lg-ultragear.png"
+  },
+  {
+    "name": "Acer Predator",
+    "description": "The best monitor in the world",
+    "price": 150.0,
+    "stock": 12,
+    "category": "monitor",
+    "imgUrl": "https://cdn.com/acer-predator.png"
+  },
+  {
+    "name": "Razer BlackWidow V3",
+    "description": "The best keyboard in the world",
+    "price": 99.99,
+    "stock": 12,
+    "category": "keyboard",
+    "imgUrl": "https://cdn.com/razer-blackwidow-v3.png"
+  },
+  {
+    "name": "Corsair K70",
+    "description": "The best keyboard in the world",
+    "price": 79.99,
+    "stock": 12,
+    "category": "keyboard",
+    "imgUrl": "https://cdn.com/corsair-k70.png"
+  },
+  {
+    "name": "Logitech G Pro",
+    "description": "The best keyboard in the world",
+    "price": 59.99,
+    "stock": 12,
+    "category": "keyboard",
+    "imgUrl": "https://cdn.com/logitech-gpro.png"
+  },
+  {
+    "name": "Razer Viper",
+    "description": "The best mouse in the world",
+    "price": 49.99,
+    "stock": 12,
+    "category": "mouse",
+    "imgUrl": "https://cdn.com/razer-viper.png"
+  },
+  {
+    "name": "Logitech G502 Pro",
+    "description": "The best mouse in the world",
+    "price": 39.99,
+    "stock": 12,
+    "category": "mouse",
+    "imgUrl": "https://cdn.com/logitech-g502.png"
+  },
+  {
+    "name": "SteelSeries Rival 3",
+    "description": "The best mouse in the world",
+    "price": 29.99,
+    "stock": 12,
+    "category": "mouse",
+    "imgUrl": "https://cdn.com/steelseries-rival3.png"
+  }
+]

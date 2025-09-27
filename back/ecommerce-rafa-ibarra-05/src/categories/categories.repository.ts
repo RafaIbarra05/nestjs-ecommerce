@@ -2,35 +2,42 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
-import * as Data from '../utils/seeder.json';
+import Data from '../utils/seeder.json';
 
 @Injectable()
 export class CategoriesRepository {
   constructor(
     @InjectRepository(Category)
-    private categoriesReposiroty: Repository<Category>,
+    private categoriesRepository: Repository<Category>,
   ) {}
 
   async getCategories() {
-    return this.categoriesReposiroty.find();
+    return this.categoriesRepository.find();
   }
+
   async addCategories() {
     const results = { insert: 0, skipped: 0, total: 0 };
 
-    for (const element of Data) {
-      const categoryElement = element.category;
+    const uniqueCategories: Set<string> = new Set();
 
-      const exists = await this.categoriesReposiroty.findOne({
-        where: { name: categoryElement },
+    for (const product of Data) {
+      uniqueCategories.add(product.category);
+    }
+
+    const categoriesArray: string[] = [...uniqueCategories];
+
+    for (const category of categoriesArray) {
+      const exists = await this.categoriesRepository.findOne({
+        where: { name: category },
       });
 
       if (exists) {
         results.skipped++;
       } else {
-        const newCategory = this.categoriesReposiroty.create({
-          name: categoryElement,
+        const newCategory = this.categoriesRepository.create({
+          name: category,
         });
-        await this.categoriesReposiroty.save(newCategory);
+        await this.categoriesRepository.save(newCategory);
         results.insert++;
       }
     }

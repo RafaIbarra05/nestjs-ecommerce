@@ -50,8 +50,7 @@ export class ProductsService {
     return this.productsRepo.delete(id);
   }
 
-  // Seed desde archivo externo
-  async seed(products: Partial<Product>[]) {
-    return this.productsRepo.seedProducts(products);
+  async seed() {
+    return this.productsRepo.seedProducts();
   }
 }

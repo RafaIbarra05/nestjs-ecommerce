@@ -15,7 +15,6 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { Product } from './entities/product.entity';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -172,7 +171,7 @@ export class ProductsController {
     status: 400,
     description: 'Error en el formato de datos enviados',
   })
-  seed(@Body() products: Partial<Product>[]) {
-    return this.productsService.seed(products);
+  seed() {
+    return this.productsService.seed();
   }
 }
