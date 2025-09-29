@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { ProductSeed } from 'src/common/types/product-seed.type';
 import Data from '../utils/seeder.json';
 import { Category } from 'src/categories/entities/category.entity';
+import { SeederResult } from 'src/common/types/seeder-result';
+import { PaginationResult } from 'src/common/types/pagination-result';
 
 @Injectable()
 export class ProductsRepository {
@@ -15,22 +17,30 @@ export class ProductsRepository {
     private readonly CategoriesRepository: Repository<Category>,
   ) {}
 
-  async paginate(page: number, limit: number) {
+  async paginate(
+    page: number,
+    limit: number,
+  ): Promise<PaginationResult<Product>> {
+    const currentPage = page > 0 ? page : 1;
+    const currentLimit = limit > 0 ? limit : 5;
+
     const [items, total] = await this.repo.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
+      skip: (currentPage - 1) * currentLimit,
+      take: currentLimit,
       relations: ['category'],
     });
 
     return {
-      page,
-      limit,
+      page: currentPage,
+      limit: currentLimit,
       total,
-      items,
+      data: items,
+      hasNextPage: currentPage * currentLimit > total,
+      hasPrevPage: currentPage > 1,
     };
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<Product> {
     const product = await this.repo.findOne({
       where: { id },
       relations: ['category'],
@@ -39,24 +49,33 @@ export class ProductsRepository {
     return product;
   }
 
-  async create(data: Partial<Product>) {
+  async create(data: Partial<Product>): Promise<Product> {
     const newProduct = this.repo.create(data);
-    const saved = await this.repo.save(newProduct);
-    return saved.id;
+    return await this.repo.save(newProduct);
   }
 
-  async update(id: string, data: Partial<Product>) {
+  async update(id: string, data: Partial<Product>): Promise<Product> {
     await this.repo.update(id, data);
-    return id;
+    const updated = await this.repo.findOne({
+      where: { id },
+      relations: ['category'],
+    });
+    if (!updated) {
+      throw new NotFoundException(`Producto con id ${id} no encontrado`);
+    }
+    return updated;
   }
 
-  async delete(id: string) {
-    await this.repo.delete(id);
-    return id;
+  async delete(id: string): Promise<{ delete: boolean }> {
+    const result = await this.repo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Producto con id ${id} no encontrado`);
+    }
+    return { delete: true };
   }
 
-  async seedProducts() {
-    const results = { insert: 0, skipped: 0, total: 0 };
+  async seedProducts(): Promise<SeederResult> {
+    const results = { inserted: 0, skipped: 0, total: 0 };
     const products: ProductSeed[] = Data as ProductSeed[];
 
     for (const product of products) {
@@ -81,10 +100,10 @@ export class ProductsRepository {
         category,
       });
       await this.repo.save(newProduct);
-      results.insert++;
+      results.inserted++;
     }
 
-    results.total = results.insert + results.skipped;
+    results.total = await this.repo.count();
     return results;
   }
 }

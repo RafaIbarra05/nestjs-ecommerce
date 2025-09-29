@@ -62,7 +62,8 @@ export class UsersController {
     );
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @ApiResponse({
     status: 200,
     description: 'Usuario encontrado',
@@ -90,7 +91,8 @@ export class UsersController {
     return this.service.findById(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Put(':id')
   @ApiResponse({
     status: 200,
@@ -123,12 +125,13 @@ export class UsersController {
     };
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Delete(':id')
   @ApiResponse({
     status: 200,
     description: 'Usuario eliminado correctamente',
-    schema: { example: { id: 'uuid-eliminado' } },
+    schema: { example: { delete: true } },
   })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @ApiResponse({

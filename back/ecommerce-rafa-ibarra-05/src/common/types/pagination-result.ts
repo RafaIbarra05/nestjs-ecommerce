@@ -3,4 +3,6 @@ export interface PaginationResult<T> {
   limit: number;
   total: number;
   data: T[];
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
 }

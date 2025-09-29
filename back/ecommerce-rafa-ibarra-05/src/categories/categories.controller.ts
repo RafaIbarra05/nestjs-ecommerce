@@ -1,12 +1,18 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Post('seeder')
   @ApiResponse({
     status: 201,
@@ -18,6 +24,10 @@ export class CategoriesController {
         total: 4,
       },
     },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Error en el formato de datos enviados',
   })
   @ApiResponse({
     status: 500,

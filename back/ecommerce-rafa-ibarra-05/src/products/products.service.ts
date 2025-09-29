@@ -5,6 +5,8 @@ import { Product } from './entities/product.entity';
 import { Category } from '../categories/entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { SeederResult } from 'src/common/types/seeder-result';
+import { PaginationResult } from 'src/common/types/pagination-result';
 
 @Injectable()
 export class ProductsService {
@@ -15,15 +17,15 @@ export class ProductsService {
     private readonly categoryRepo: Repository<Category>,
   ) {}
 
-  getAll(page = 1, limit = 5) {
+  getAll(page = 1, limit = 5): Promise<PaginationResult<Product>> {
     return this.productsRepo.paginate(page, limit);
   }
 
-  findById(id: string) {
+  findById(id: string): Promise<Product | null> {
     return this.productsRepo.findById(id);
   }
 
-  async create(data: CreateProductDto) {
+  async create(data: CreateProductDto): Promise<Product> {
     const category = await this.categoryRepo.findOneBy({ id: data.categoryId });
 
     if (!category) {
@@ -42,15 +44,15 @@ export class ProductsService {
     return this.productsRepo.create(productData);
   }
 
-  update(id: string, data: Partial<Product>) {
+  update(id: string, data: Partial<Product>): Promise<Product> {
     return this.productsRepo.update(id, data);
   }
 
-  delete(id: string) {
+  delete(id: string): Promise<{ delete: boolean }> {
     return this.productsRepo.delete(id);
   }
 
-  async seed() {
+  async seed(): Promise<SeederResult> {
     return this.productsRepo.seedProducts();
   }
 }

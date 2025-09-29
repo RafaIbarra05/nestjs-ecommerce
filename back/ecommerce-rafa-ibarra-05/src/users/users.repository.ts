@@ -69,11 +69,12 @@ export class UsersRepository {
     return this.repo.save(user);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<{ delete: boolean }> {
     const result = await this.repo.delete(id);
     if (!result.affected) {
       throw new NotFoundException('Usuario no encontrado');
     }
+    return { delete: true };
   }
 
   async paginate(

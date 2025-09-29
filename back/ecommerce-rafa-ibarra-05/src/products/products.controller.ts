@@ -16,19 +16,18 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/auth/roles.enum';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @ApiTags('Products')
 @ApiBearerAuth()
 @Controller('products')
-@UseGuards(AuthGuard, RolesGuard)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Get('list')
+  @Get('products')
   @ApiResponse({
     status: 200,
     description: 'Lista paginada de productos',
@@ -81,8 +80,9 @@ export class ProductsController {
     return this.productsService.findById(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Post()
+  @Roles(Role.Admin)
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: 201,
@@ -108,7 +108,7 @@ export class ProductsController {
     return this.productsService.create(data);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Put(':id')
   @Roles(Role.Admin)
   @ApiResponse({
@@ -139,12 +139,12 @@ export class ProductsController {
     return this.productsService.update(id, data);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Delete(':id')
   @ApiResponse({
     status: 200,
     description: 'Producto eliminado correctamente',
-    schema: { example: { id: 'uuid-deleted' } },
+    schema: { example: { deleted: true } },
   })
   @ApiResponse({
     status: 403,
@@ -154,7 +154,7 @@ export class ProductsController {
   delete(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.delete(id);
   }
-
+  @UseGuards(AuthGuard, RolesGuard)
   @Post('seeder')
   @ApiResponse({
     status: 201,

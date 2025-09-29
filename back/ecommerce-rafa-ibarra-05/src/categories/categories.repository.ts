@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import Data from '../utils/seeder.json';
+import { SeederResult } from 'src/common/types/seeder-result';
 
 @Injectable()
 export class CategoriesRepository {
@@ -11,12 +12,12 @@ export class CategoriesRepository {
     private categoriesRepository: Repository<Category>,
   ) {}
 
-  async getCategories() {
+  async getCategories(): Promise<Category[]> {
     return this.categoriesRepository.find();
   }
 
-  async addCategories() {
-    const results = { insert: 0, skipped: 0, total: 0 };
+  async addCategories(): Promise<SeederResult> {
+    const results = { inserted: 0, skipped: 0, total: 0 };
 
     const uniqueCategories: Set<string> = new Set();
 
@@ -38,11 +39,11 @@ export class CategoriesRepository {
           name: category,
         });
         await this.categoriesRepository.save(newCategory);
-        results.insert++;
+        results.inserted++;
       }
     }
 
-    results.total = results.insert + results.skipped;
+    results.total = await this.categoriesRepository.count();
     return results;
   }
 }
