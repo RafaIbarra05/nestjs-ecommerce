@@ -1,6 +1,6 @@
 import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -13,6 +13,7 @@ export class CategoriesController {
 
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
+  @ApiBearerAuth()
   @Post('seeder')
   @ApiResponse({
     status: 201,

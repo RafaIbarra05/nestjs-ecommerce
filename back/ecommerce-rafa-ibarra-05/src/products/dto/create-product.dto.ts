@@ -10,7 +10,7 @@ import {
 
 export class CreateProductDto {
   @ApiProperty({
-    example: 'Zapatillas Nike Air',
+    example: 'Asus ROG Swift',
     description: 'Nombre del producto. Debe ser único.',
   })
   @IsString()
@@ -18,7 +18,7 @@ export class CreateProductDto {
   name: string;
 
   @ApiProperty({
-    example: 'Calzado deportivo de alta calidad',
+    example: 'Monitor gamer de alta gama con 360Hz',
     description: 'Descripción detallada del producto.',
   })
   @IsString()
@@ -26,7 +26,7 @@ export class CreateProductDto {
   description: string;
 
   @ApiProperty({
-    example: 99.99,
+    example: 499.99,
     description: 'Precio del producto en dólares. Debe ser un número positivo.',
   })
   @IsNumber()
@@ -34,7 +34,7 @@ export class CreateProductDto {
   price: number;
 
   @ApiProperty({
-    example: 20,
+    example: 15,
     description: 'Cantidad disponible en stock. Debe ser un número positivo.',
   })
   @IsNumber()
@@ -42,7 +42,7 @@ export class CreateProductDto {
   stock: number;
 
   @ApiProperty({
-    example: 'https://cdn.com/zapatillas.png',
+    example: 'https://cdn.com/asus-rog-swift.png',
     description: 'URL de la imagen del producto. Opcional.',
     required: false,
   })
@@ -51,7 +51,7 @@ export class CreateProductDto {
   imgUrl?: string;
 
   @ApiProperty({
-    example: 'uuid-cat-123',
+    example: 'uuid-cat-monitor',
     description: 'ID de la categoría a la que pertenece el producto.',
   })
   @IsUUID()

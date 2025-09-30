@@ -89,13 +89,12 @@ export class ProductsController {
     description: 'Producto creado correctamente',
     schema: {
       example: {
-        id: 'uuid-new',
-        name: 'Remera Adidas',
-        description: 'Remera de algodón de alta calidad',
-        price: 29.99,
-        stock: 50,
-        imgUrl: 'https://cdn.com/remera.png',
-        category: { id: 'uuid-cat', name: 'Ropa' },
+        name: 'Asus ROG Swift',
+        description: 'High-end gaming monitor with 360Hz refresh rate',
+        price: 499.99,
+        stock: 20,
+        categoryId: 'uuid-monitor-category',
+        imgUrl: 'https://cdn.com/asus-rog-swift.png',
       },
     },
   })
@@ -116,13 +115,11 @@ export class ProductsController {
     description: 'Producto actualizado correctamente',
     schema: {
       example: {
-        id: 'uuid',
-        name: 'Zapatillas Nike Air MAX',
-        description: 'Versión mejorada del modelo clásico',
-        price: 120.0,
-        stock: 18,
-        imgUrl: 'https://cdn.com/nikeairmax.png',
-        category: { id: 'uuid-cat', name: 'Calzado' },
+        name: 'Logitech G Pro X Superlight',
+        description: 'Ultra-lightweight wireless gaming mouse with HERO sensor',
+        price: 129.99,
+        stock: 8,
+        imgUrl: 'https://cdn.com/logitech-gpro-x-superlight.png',
       },
     },
   })

@@ -9,7 +9,7 @@ import {
 
 export class UpdateProductDto {
   @ApiPropertyOptional({
-    example: 'Zapatillas Nike Air MAX',
+    example: 'Razer BlackWidow V4',
     description: 'Nombre del producto (opcional).',
   })
   @IsOptional()
@@ -17,7 +17,7 @@ export class UpdateProductDto {
   name?: string;
 
   @ApiPropertyOptional({
-    example: 'Versión mejorada del modelo clásico',
+    example: 'Teclado mecánico gamer con switches ópticos',
     description: 'Descripción del producto (opcional).',
   })
   @IsOptional()
@@ -25,7 +25,7 @@ export class UpdateProductDto {
   description?: string;
 
   @ApiPropertyOptional({
-    example: 120.5,
+    example: 129.99,
     description: 'Precio actualizado del producto en dólares (opcional).',
   })
   @IsOptional()
@@ -34,7 +34,7 @@ export class UpdateProductDto {
   price?: number;
 
   @ApiPropertyOptional({
-    example: 15,
+    example: 18,
     description: 'Stock actualizado del producto (opcional).',
   })
   @IsOptional()
@@ -43,7 +43,7 @@ export class UpdateProductDto {
   stock?: number;
 
   @ApiPropertyOptional({
-    example: 'https://cdn.com/nikeairmax.png',
+    example: 'https://cdn.com/razer-blackwidow-v4.png',
     description: 'Nueva URL de la imagen del producto (opcional).',
   })
   @IsOptional()
@@ -51,7 +51,7 @@ export class UpdateProductDto {
   imgUrl?: string;
 
   @ApiPropertyOptional({
-    example: 'uuid-cat-456',
+    example: 'uuid-cat-keyboard',
     description: 'Nuevo ID de la categoría (opcional).',
   })
   @IsOptional()
