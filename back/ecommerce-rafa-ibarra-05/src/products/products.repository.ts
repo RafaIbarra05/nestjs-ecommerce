@@ -31,12 +31,14 @@ export class ProductsRepository {
     });
 
     return {
-      page: currentPage,
-      limit: currentLimit,
-      total,
       data: items,
-      hasNextPage: currentPage * currentLimit > total,
-      hasPrevPage: currentPage > 1,
+      meta: {
+        page: currentPage,
+        limit: currentLimit,
+        total,
+        hasNextPage: currentPage * currentLimit < total,
+        hasPrevPage: currentPage > 1,
+      },
     };
   }
 

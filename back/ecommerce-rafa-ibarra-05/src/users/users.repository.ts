@@ -100,10 +100,14 @@ export class UsersRepository {
     });
 
     return {
-      page: currentPage,
-      limit: currentLimit,
-      total,
       data: items,
+      meta: {
+        page: currentPage,
+        limit: currentLimit,
+        total,
+        hasNextPage: currentPage * currentLimit < total,
+        hasPrevPage: currentPage > 1,
+      },
     };
   }
 

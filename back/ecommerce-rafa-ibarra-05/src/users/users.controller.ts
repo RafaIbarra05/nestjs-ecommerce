@@ -48,6 +48,17 @@ export class UsersController {
     },
   })
   @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
+  })
+  @ApiResponse({
     status: 401,
     description: 'No autorizado (JWT inválido o ausente)',
   })
@@ -81,6 +92,17 @@ export class UsersController {
       },
     },
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
+  })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @ApiResponse({
     status: 401,
@@ -109,6 +131,17 @@ export class UsersController {
       },
     },
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
+  })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @ApiResponse({
     status: 401,
@@ -132,6 +165,17 @@ export class UsersController {
     status: 200,
     description: 'Usuario eliminado correctamente',
     schema: { example: { delete: true } },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @ApiResponse({

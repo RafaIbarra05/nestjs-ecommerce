@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Param,
   ParseUUIDPipe,
@@ -38,7 +37,7 @@ export class FilesController {
     schema: {
       type: 'object',
       properties: {
-        files: {
+        file: {
           type: 'string',
           format: 'binary',
         },
@@ -50,9 +49,10 @@ export class FilesController {
     description: 'Imagen subida correctamente',
     schema: {
       example: {
-        id: 'uuid',
-        name: 'Zapatillas Nike Air',
-        imgUrl: 'https://res.cloudinary.com/.../imagen.jpg',
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        name: 'Placa de Video NVIDIA GeForce RTX 4070 Ti',
+        imgUrl:
+          'https://res.cloudinary.com/tu-cloud/image/upload/v123456789/rtx4070ti.png',
       },
     },
   })

@@ -35,16 +35,31 @@ export class ProductsController {
       example: {
         data: [
           {
-            id: 'uuid',
-            name: 'Zapatillas Nike Air',
-            description: 'Calzado deportivo de alta calidad',
-            price: 99.99,
-            stock: 20,
-            imgUrl: 'https://cdn.com/zapatillas.png',
-            category: { id: 'uuid-cat', name: 'Calzado' },
+            id: 'uuid1',
+            name: 'Placa de Video NVIDIA GeForce RTX 4070 Ti',
+            description: 'GPU con 12GB GDDR6X para gaming y diseño 3D',
+            price: 899.99,
+            stock: 5,
+            imgUrl: 'https://cdn.com/rtx4070.png',
+            category: { id: 'uuid-cat1', name: 'Placas de Video' },
+          },
+          {
+            id: 'uuid2',
+            name: "Monitor LG UltraGear 27'' QHD 165Hz",
+            description: 'Monitor gamer IPS 165Hz con 1ms de respuesta',
+            price: 399.99,
+            stock: 15,
+            imgUrl: 'https://cdn.com/lg-monitor.png',
+            category: { id: 'uuid-cat2', name: 'Monitores' },
           },
         ],
-        meta: { page: 1, limit: 5, total: 15 },
+        meta: {
+          page: 1,
+          limit: 5,
+          total: 20,
+          hasNextPage: true,
+          hasPrevPage: false,
+        },
       },
     },
   })
@@ -65,13 +80,28 @@ export class ProductsController {
     description: 'Producto encontrado',
     schema: {
       example: {
-        id: 'uuid',
-        name: 'Zapatillas Nike Air',
-        description: 'Calzado deportivo de alta calidad',
-        price: 99.99,
-        stock: 20,
-        imgUrl: 'https://cdn.com/zapatillas.png',
-        category: { id: 'uuid-cat', name: 'Calzado' },
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        name: 'Disco SSD Kingston NV2 1TB NVMe',
+        description:
+          'Unidad de estado sólido M.2 PCIe 4.0 NVMe con velocidad de lectura hasta 3500MB/s',
+        price: 79.99,
+        stock: 60,
+        imgUrl: 'https://cdn.com/kingston-nv2-1tb.png',
+        category: {
+          id: '999e8400-e29b-41d4-a716-446655440000',
+          name: 'Almacenamiento',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
       },
     },
   })
@@ -98,7 +128,17 @@ export class ProductsController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Datos inválidos en el DTO' })
+  @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
+  })
   @ApiResponse({
     status: 403,
     description: 'Acceso denegado, requiere rol de Admin',
@@ -123,7 +163,17 @@ export class ProductsController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Datos inválidos en el DTO' })
+  @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
+  })
   @ApiResponse({
     status: 403,
     description: 'Acceso denegado, requiere rol de Admin',
@@ -142,6 +192,17 @@ export class ProductsController {
     status: 200,
     description: 'Producto eliminado correctamente',
     schema: { example: { deleted: true } },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
   })
   @ApiResponse({
     status: 403,
@@ -163,10 +224,6 @@ export class ProductsController {
         total: 7,
       },
     },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Error en el formato de datos enviados',
   })
   seed() {
     return this.productsService.seed();

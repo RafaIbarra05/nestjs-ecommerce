@@ -60,6 +60,17 @@ export class OrdersController {
     type: OrderResponseDto,
   })
   @ApiResponse({
+    status: 400,
+    description: 'Formato de ID inválido (UUID esperado)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Validation failed (uuid is expected)',
+        error: 'Bad Request',
+      },
+    },
+  })
+  @ApiResponse({
     status: 401,
     description: 'No autorizado (JWT inválido o ausente)',
   })
