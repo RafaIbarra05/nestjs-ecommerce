@@ -18,7 +18,16 @@ import { AuthGuard } from '../auth/auth.guard';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/auth/roles.enum';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/roles.guard';
 
 @ApiTags('Products')
@@ -28,8 +37,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get('products')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Lista paginada de productos',
     schema: {
       example: {
@@ -43,15 +51,6 @@ export class ProductsController {
             imgUrl: 'https://cdn.com/rtx4070.png',
             category: { id: 'uuid-cat1', name: 'Placas de Video' },
           },
-          {
-            id: 'uuid2',
-            name: "Monitor LG UltraGear 27'' QHD 165Hz",
-            description: 'Monitor gamer IPS 165Hz con 1ms de respuesta',
-            price: 399.99,
-            stock: 15,
-            imgUrl: 'https://cdn.com/lg-monitor.png',
-            category: { id: 'uuid-cat2', name: 'Monitores' },
-          },
         ],
         meta: {
           page: 1,
@@ -63,8 +62,7 @@ export class ProductsController {
       },
     },
   })
-  @ApiResponse({
-    status: 401,
+  @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',
   })
   findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
@@ -75,8 +73,7 @@ export class ProductsController {
   }
 
   @Get(':id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Producto encontrado',
     schema: {
       example: {
@@ -94,18 +91,10 @@ export class ProductsController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'Validation failed (uuid is expected)',
-        error: 'Bad Request',
-      },
-    },
   })
-  @ApiResponse({ status: 404, description: 'Producto no encontrado' })
+  @ApiNotFoundResponse({ description: 'Producto no encontrado' })
   getOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.findById(id);
   }
@@ -114,33 +103,22 @@ export class ProductsController {
   @Post()
   @Roles(Role.Admin)
   @HttpCode(HttpStatus.CREATED)
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Producto creado correctamente',
     schema: {
       example: {
+        id: 'uuid-new',
         name: 'Asus ROG Swift',
         description: 'High-end gaming monitor with 360Hz refresh rate',
         price: 499.99,
         stock: 20,
-        categoryId: 'uuid-monitor-category',
         imgUrl: 'https://cdn.com/asus-rog-swift.png',
+        category: { id: 'uuid-cat-monitor', name: 'Monitores' },
       },
     },
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Formato de ID inválido (UUID esperado)',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'Validation failed (uuid is expected)',
-        error: 'Bad Request',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 403,
+  @ApiBadRequestResponse({ description: 'Datos inválidos o mal formato de ID' })
+  @ApiForbiddenResponse({
     description: 'Acceso denegado, requiere rol de Admin',
   })
   create(@Body() data: CreateProductDto) {
@@ -150,11 +128,11 @@ export class ProductsController {
   @UseGuards(AuthGuard, RolesGuard)
   @Put(':id')
   @Roles(Role.Admin)
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Producto actualizado correctamente',
     schema: {
       example: {
+        id: 'uuid',
         name: 'Logitech G Pro X Superlight',
         description: 'Ultra-lightweight wireless gaming mouse with HERO sensor',
         price: 129.99,
@@ -163,22 +141,13 @@ export class ProductsController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'Validation failed (uuid is expected)',
-        error: 'Bad Request',
-      },
-    },
   })
-  @ApiResponse({
-    status: 403,
+  @ApiForbiddenResponse({
     description: 'Acceso denegado, requiere rol de Admin',
   })
-  @ApiResponse({ status: 404, description: 'Producto no encontrado' })
+  @ApiNotFoundResponse({ description: 'Producto no encontrado' })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() data: UpdateProductDto,
@@ -188,34 +157,23 @@ export class ProductsController {
 
   @UseGuards(AuthGuard, RolesGuard)
   @Delete(':id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Producto eliminado correctamente',
     schema: { example: { deleted: true } },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'Validation failed (uuid is expected)',
-        error: 'Bad Request',
-      },
-    },
   })
-  @ApiResponse({
-    status: 403,
+  @ApiForbiddenResponse({
     description: 'Acceso denegado, requiere rol de Admin',
   })
-  @ApiResponse({ status: 404, description: 'Producto no encontrado' })
+  @ApiNotFoundResponse({ description: 'Producto no encontrado' })
   delete(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.delete(id);
   }
   @UseGuards(AuthGuard, RolesGuard)
   @Post('seeder')
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Productos cargados exitosamente por seeder',
     schema: {
       example: {

@@ -7,10 +7,10 @@ class UserSummaryDto {
   })
   id: string;
 
-  @ApiProperty({ example: 'Rafa', description: 'Nombre del usuario' })
+  @ApiProperty({ example: 'Juan', description: 'Nombre del usuario' })
   name: string;
 
-  @ApiProperty({ example: 'rafa@mail.com', description: 'Correo del usuario' })
+  @ApiProperty({ example: 'juan@mail.com', description: 'Correo del usuario' })
   email: string;
 }
 
@@ -19,7 +19,7 @@ class ProductSummaryDto {
   id: string;
 
   @ApiProperty({
-    example: 'Zapatillas Nike Air',
+    example: 'NVIDIA GeForce RTX 4090',
     description: 'Nombre del producto',
   })
   name: string;
@@ -28,7 +28,7 @@ class ProductSummaryDto {
   price: number;
 
   @ApiProperty({
-    example: 'https://cdn.com/zapatillas.png',
+    example: 'https://cdn.com/nvidia-rtx4090.png',
     description: 'Imagen del producto',
   })
   imgUrl: string;

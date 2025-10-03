@@ -15,7 +15,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/auth/roles.enum';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -26,8 +34,7 @@ export class UsersController {
   @UseGuards(AuthGuard, RolesGuard)
   @Get()
   @Roles(Role.Admin)
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Lista paginada de usuarios',
     schema: {
       example: {
@@ -47,8 +54,7 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
     schema: {
       example: {
@@ -58,12 +64,10 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({
-    status: 401,
+  @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',
   })
-  @ApiResponse({
-    status: 403,
+  @ApiForbiddenResponse({
     description: 'Acceso denegado, requiere rol de Admin',
   })
   getAll(@Query('page') page?: string, @Query('limit') limit?: string) {
@@ -75,8 +79,8 @@ export class UsersController {
 
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  @ApiResponse({
-    status: 200,
+  @Get(':id')
+  @ApiOkResponse({
     description: 'Usuario encontrado',
     schema: {
       example: {
@@ -92,8 +96,7 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
     schema: {
       example: {
@@ -103,12 +106,10 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  @ApiResponse({
-    status: 401,
+  @ApiNotFoundResponse({ description: 'Usuario no encontrado' })
+  @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',
   })
-  @Get(':id')
   getOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.service.findById(id);
   }
@@ -116,8 +117,7 @@ export class UsersController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @Put(':id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Usuario actualizado correctamente',
     schema: {
       example: {
@@ -131,8 +131,7 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
     schema: {
       example: {
@@ -142,9 +141,8 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  @ApiResponse({
-    status: 401,
+  @ApiNotFoundResponse({ description: 'Usuario no encontrado' })
+  @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',
   })
   async update(
@@ -161,13 +159,11 @@ export class UsersController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @Delete(':id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Usuario eliminado correctamente',
     schema: { example: { delete: true } },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
     schema: {
       example: {
@@ -177,9 +173,8 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  @ApiResponse({
-    status: 401,
+  @ApiNotFoundResponse({ description: 'Usuario no encontrado' })
+  @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',
   })
   delete(@Param('id', new ParseUUIDPipe()) id: string) {

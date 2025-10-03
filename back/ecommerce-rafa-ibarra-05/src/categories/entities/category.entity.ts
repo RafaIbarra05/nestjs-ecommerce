@@ -12,7 +12,7 @@ export class Category {
   id: string;
 
   @ApiProperty({
-    example: 'Calzado',
+    example: 'Monitor',
     description: 'Nombre de la categoría. Debe ser único.',
     maxLength: 50,
   })

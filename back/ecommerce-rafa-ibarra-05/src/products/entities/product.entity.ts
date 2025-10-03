@@ -19,7 +19,7 @@ export class Product {
   id: string;
 
   @ApiProperty({
-    example: 'Zapatillas Nike Air',
+    example: 'NVIDIA GeForce RTX 4090',
     description: 'Nombre del producto. Debe ser único.',
     maxLength: 50,
   })
@@ -27,7 +27,8 @@ export class Product {
   name: string;
 
   @ApiProperty({
-    example: 'Calzado deportivo de alta calidad',
+    example:
+      'Tarjeta gráfica de última generación con 24 GB GDDR6X ideal para gaming y diseño 3D.',
     description: 'Descripción detallada del producto',
   })
   @Column({ type: 'text', nullable: false })
@@ -48,9 +49,9 @@ export class Product {
   stock: number;
 
   @ApiProperty({
-    example: 'https://cdn.com/zapatillas.png',
-    description: 'URL de la imagen del producto',
-    default: 'https://cdn-icons-png.flaticon.com/512/1375/1375106.png',
+    example: 'https://cdn.com/nvidia-rtx4090.png',
+    description: 'URL de la imagen del producto de hardware.',
+    default: 'https://cdn-icons-png.flaticon.com/512/1055/1055646.png',
   })
   @Column({
     type: 'text',

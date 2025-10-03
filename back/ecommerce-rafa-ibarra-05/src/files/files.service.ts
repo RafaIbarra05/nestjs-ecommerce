@@ -13,7 +13,6 @@ export class FilesService {
   ) {}
 
   async uploadProductImage(id: string, file: Express.Multer.File) {
-    // Subir imagen a Cloudinary
     const uploadResult = await this.cloudinaryClient.uploader.upload(
       file.path,
       {
@@ -21,16 +20,13 @@ export class FilesService {
       },
     );
 
-    // Buscar producto en DB
     const product = await this.productsRepo.findOne({ where: { id } });
     if (!product)
       throw new NotFoundException(`Producto con id ${id} no encontrado`);
 
-    // Actualizar campo imgUrl
     product.imgUrl = uploadResult.secure_url;
     await this.productsRepo.save(product);
 
-    // Devolver producto actualizado
     return {
       message: 'Imagen actualizada correctamente',
       product,

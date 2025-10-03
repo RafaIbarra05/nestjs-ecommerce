@@ -12,12 +12,16 @@ import { FilesService } from './files.service';
 import { ValidateImagePipe } from './pipes/validate-image.pipe';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiConsumes,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -44,8 +48,7 @@ export class FilesController {
       },
     },
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Imagen subida correctamente',
     schema: {
       example: {
@@ -55,6 +58,25 @@ export class FilesController {
           'https://res.cloudinary.com/tu-cloud/image/upload/v123456789/rtx4070ti.png',
       },
     },
+  })
+  @ApiBadRequestResponse({
+    description: 'Formato de archivo inválido o error de validación',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'El archivo debe ser una imagen válida (jpg, png, webp)',
+        error: 'Bad Request',
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'No autorizado (JWT inválido o ausente)',
+  })
+  @ApiForbiddenResponse({
+    description: 'Acceso denegado, requiere rol de Admin',
+  })
+  @ApiNotFoundResponse({
+    description: 'Producto no encontrado para asociar la imagen',
   })
   @UseInterceptors(FileInterceptor('file'))
   async uploadProductImage(

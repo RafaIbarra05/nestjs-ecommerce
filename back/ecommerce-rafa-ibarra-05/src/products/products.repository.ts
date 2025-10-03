@@ -67,7 +67,6 @@ export class ProductsRepository {
       throw new NotFoundException(`Producto con id ${id} no encontrado`);
     }
 
-    // 👇 Resolución de categoría si viene en el DTO
     if (data.categoryId) {
       const category = await this.CategoriesRepository.findOne({
         where: { id: data.categoryId },
@@ -82,12 +81,10 @@ export class ProductsRepository {
       product.category = category;
     }
 
-    // 👇 Quitamos categoryId del DTO para no "ensuciar" el assign
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { categoryId, ...rest } = data;
+    const { categoryId: _, ...rest } = data;
 
-    // 👇 Mergeamos solo lo que queda en el DTO
-    Object.assign(product, rest);
+    this.repo.merge(product, rest);
 
     return await this.repo.save(product);
   }

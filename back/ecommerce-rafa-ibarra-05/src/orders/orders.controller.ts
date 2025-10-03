@@ -7,10 +7,18 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrderResponseDto } from './dto/OrderResponseDto';
 
 @ApiTags('Orders')
@@ -21,18 +29,11 @@ export class OrdersController {
   constructor(private readonly service: OrdersService) {}
 
   @Post()
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Orden creada exitosamente',
-    schema: {
-      example: {
-        message: 'Orden creada exitosamente',
-        orderId: 'uuid-order-123',
-      },
-    },
+    type: OrderResponseDto,
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Datos inválidos en la orden (ejemplo: stock insuficiente)',
     schema: {
       example: {
@@ -42,25 +43,18 @@ export class OrdersController {
       },
     },
   })
-  @ApiResponse({
-    status: 401,
+  @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',
   })
-  async create(@Body() data: CreateOrderDto) {
-    const order = await this.service.create(data);
-    return {
-      message: 'Orden creada exitosamente',
-      orderId: order.id,
-    };
+  async create(@Body() data: CreateOrderDto): Promise<OrderResponseDto> {
+    return await this.service.create(data);
   }
   @Get(':id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Detalle de una orden',
     type: OrderResponseDto,
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Formato de ID inválido (UUID esperado)',
     schema: {
       example: {
@@ -70,8 +64,7 @@ export class OrdersController {
       },
     },
   })
-  @ApiResponse({
-    status: 401,
+  @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',
   })
   @ApiResponse({ status: 404, description: 'Orden no encontrada' })

@@ -38,12 +38,13 @@ export class OrderDetail {
     description: 'Lista de productos incluidos en el detalle de la orden',
     example: [
       {
-        id: 'uuid-prod-1',
-        name: 'Zapatillas Nike Air',
-        description: 'Calzado deportivo de alta calidad',
-        price: 99.99,
-        stock: 20,
-        imgUrl: 'https://cdn.com/zapatillas.png',
+        id: 'uuid-prod-4090',
+        name: 'NVIDIA GeForce RTX 4090',
+        description:
+          'Tarjeta gráfica de alto rendimiento con 24 GB GDDR6X ideal para gaming 4K y renderizado 3D.',
+        price: 1799.99,
+        stock: 8,
+        imgUrl: 'https://cdn.com/nvidia-rtx4090.png',
       },
     ],
   })
