@@ -4,8 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from './order.entity';
-import { OrderDetail } from './order-detail.entity';
+import { Order } from './entities/order.entity';
+import { OrderDetail } from './entities/order-detail.entity';
 import { Repository, MoreThan } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { Product } from '../products/entities/product.entity';

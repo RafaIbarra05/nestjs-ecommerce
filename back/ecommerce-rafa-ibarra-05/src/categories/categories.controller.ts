@@ -14,6 +14,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/auth/roles.enum';
+import { Category } from './entities/category.entity';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -60,6 +61,7 @@ export class CategoriesController {
   @Get()
   @ApiOkResponse({
     description: 'Listado de categorías',
+    type: [Category],
     schema: {
       example: [
         { id: 'uuid-cat1', name: 'Calzado' },

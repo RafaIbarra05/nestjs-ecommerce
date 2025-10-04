@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from '../../categories/entities/category.entity';
-import { OrderDetail } from '../../orders/order-detail.entity';
+import { OrderDetail } from '../../orders/entities/order-detail.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('products')

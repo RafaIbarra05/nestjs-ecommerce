@@ -29,6 +29,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { Product } from './entities/product.entity';
 
 @ApiTags('Products')
 @ApiBearerAuth()
@@ -39,6 +40,7 @@ export class ProductsController {
   @Get('products')
   @ApiOkResponse({
     description: 'Lista paginada de productos',
+    type: [Product],
     schema: {
       example: {
         data: [
@@ -75,6 +77,7 @@ export class ProductsController {
   @Get(':id')
   @ApiOkResponse({
     description: 'Producto encontrado',
+    type: Product,
     schema: {
       example: {
         id: '550e8400-e29b-41d4-a716-446655440000',
@@ -105,6 +108,7 @@ export class ProductsController {
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     description: 'Producto creado correctamente',
+    type: Product,
     schema: {
       example: {
         id: 'uuid-new',
@@ -130,6 +134,7 @@ export class ProductsController {
   @Roles(Role.Admin)
   @ApiOkResponse({
     description: 'Producto actualizado correctamente',
+    type: Product,
     schema: {
       example: {
         id: 'uuid',

@@ -7,7 +7,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Order } from './order.entity';
-import { Product } from '.././products/entities/product.entity';
+import { Product } from '../../products/entities/product.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('order_details')

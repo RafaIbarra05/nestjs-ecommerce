@@ -13,6 +13,7 @@ import { ValidateImagePipe } from './pipes/validate-image.pipe';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiForbiddenResponse,
@@ -34,6 +35,7 @@ export class FilesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @Post('uploadImage/:id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Subir imagen de producto a Cloudinary' })
   @ApiConsumes('multipart/form-data')
   @ApiParam({ name: 'id', description: 'UUID del producto' })

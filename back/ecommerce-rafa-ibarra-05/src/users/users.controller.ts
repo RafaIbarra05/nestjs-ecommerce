@@ -24,6 +24,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -36,6 +37,7 @@ export class UsersController {
   @Roles(Role.Admin)
   @ApiOkResponse({
     description: 'Lista paginada de usuarios',
+    type: [User],
     schema: {
       example: {
         data: [
@@ -82,6 +84,7 @@ export class UsersController {
   @Get(':id')
   @ApiOkResponse({
     description: 'Usuario encontrado',
+    type: User,
     schema: {
       example: {
         id: 'uuid',
@@ -119,6 +122,7 @@ export class UsersController {
   @Put(':id')
   @ApiOkResponse({
     description: 'Usuario actualizado correctamente',
+    type: User,
     schema: {
       example: {
         message: 'Usuario actualizado correctamente',

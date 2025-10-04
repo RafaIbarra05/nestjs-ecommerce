@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   OneToOne,
 } from 'typeorm';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { OrderDetail } from './order-detail.entity';
 import { ApiProperty } from '@nestjs/swagger';
 

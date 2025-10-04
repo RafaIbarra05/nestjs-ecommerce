@@ -9,7 +9,8 @@ export class ValidateImagePipe implements PipeTransform {
     }
 
     const maxSize = 200 * 1024;
-    if (file.size > maxSize) {
+    const fileSize = file.size ?? file.buffer?.length ?? 0;
+    if (fileSize > maxSize) {
       throw new BadRequestException('La imagen no debe superar los 200kb');
     }
 
