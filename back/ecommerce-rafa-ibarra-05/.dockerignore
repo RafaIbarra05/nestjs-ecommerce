@@ -1,5 +1,35 @@
+# Dependencias locales
 node_modules
+npm-debug.log
+yarn-error.log
+
+# Builds y tests
 dist
+coverage
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Git y control de versiones
 .git
-Dockerfile
+.gitignore
+.github/
+
+# Configuraciones locales
 .env
+.env.local
+.env.development
+.env.production
+
+# Logs temporales
+*.log
+*.tmp
+
+# Archivos del editor / IDE
+.vscode
+.idea
+
+# Docker propios
+Dockerfile
+docker-compose.yml
