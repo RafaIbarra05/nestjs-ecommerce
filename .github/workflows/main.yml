@@ -2,7 +2,7 @@ name: Build and Push Docker image
 
 on:
   push:
-    branches: [main] 
+    branches: [main]
 
 jobs:
   build:
@@ -24,6 +24,7 @@ jobs:
       - name: Build and Push image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./back/ecommerce-rafa-ibarra-05
+          file: ./back/ecommerce-rafa-ibarra-05/Dockerfile
           push: true
           tags: rafaibar/nestjs-ecommerce:latest
