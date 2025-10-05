@@ -10,8 +10,6 @@ async function bootstrap() {
 
   app.use(LoggerGlobal);
 
-  app.setGlobalPrefix('api');
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
