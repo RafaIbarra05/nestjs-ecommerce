@@ -30,6 +30,7 @@ import {
 } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Product } from './entities/product.entity';
+import { PaginatedProductsResponse } from './dto/paginated-products-response.dto';
 
 @ApiTags('Products')
 @ApiBearerAuth()
@@ -40,29 +41,7 @@ export class ProductsController {
   @Get('products')
   @ApiOkResponse({
     description: 'Lista paginada de productos',
-    type: [Product],
-    schema: {
-      example: {
-        data: [
-          {
-            id: 'uuid1',
-            name: 'Placa de Video NVIDIA GeForce RTX 4070 Ti',
-            description: 'GPU con 12GB GDDR6X para gaming y diseño 3D',
-            price: 899.99,
-            stock: 5,
-            imgUrl: 'https://cdn.com/rtx4070.png',
-            category: { id: 'uuid-cat1', name: 'Placas de Video' },
-          },
-        ],
-        meta: {
-          page: 1,
-          limit: 5,
-          total: 20,
-          hasNextPage: true,
-          hasPrevPage: false,
-        },
-      },
-    },
+    type: PaginatedProductsResponse,
   })
   @ApiUnauthorizedResponse({
     description: 'No autorizado (JWT inválido o ausente)',

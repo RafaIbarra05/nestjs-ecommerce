@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-class UserSummaryDto {
+export class UserSummaryDto {
   @ApiProperty({
     example: 'uuid-user-1',
     description: 'ID del usuario que hizo la orden',
@@ -14,7 +14,7 @@ class UserSummaryDto {
   email: string;
 }
 
-class ProductSummaryDto {
+export class ProductSummaryDto {
   @ApiProperty({ example: 'uuid-prod-123', description: 'ID del producto' })
   id: string;
 
