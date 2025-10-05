@@ -8,10 +8,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Logger personalizado
   app.use(LoggerGlobal);
 
-  // Pipe global de validación
+  app.setGlobalPrefix('api');
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -37,4 +37,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, Document);
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Error al iniciar la aplicación:', err);
+  process.exit(1);
+});
